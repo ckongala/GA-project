@@ -1,0 +1,1 @@
+flask --app src/app run --port 5001

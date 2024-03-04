@@ -1,0 +1,693 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "ETL-Worker",
+    "description": "Core computational micro-service for COSMOS",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/ping": {
+      "get": {
+        "summary": "Ping endpoint to verify if the service is working",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "process name": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/toxicity": {
+      "post": {
+        "summary": "Endpoint to calculate toxicity for text",
+        "description": "<p>Here is the wiki for the <a target='_blank' href='https://www.section.io/engineering-education/building-a-toxicity-classifier/'>Toxicity</a></p>",
+        "parameters": [
+          {
+            "name": "Auth-Key",
+            "in": "header",
+            "description": "Authorization key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sentiment",
+            "in": "query",
+            "description": "Calculate/Don't calculate sentiment for the text",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body for the toxicity endpoint. The `data` field is an array of objects containing `id` and `text`.\n\n**Property:**\n\n- `id` (string): Input a random value.\n- `text` (string): Input the text to calculate toxicity.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "types": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "text": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "text"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful execution of toxicity endpoint",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "scores": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "toxicity": {
+                            "type": "number"
+                          },
+                          "severe_toxicity": {
+                            "type": "number"
+                          },
+                          "obscene": {
+                            "type": "number"
+                          },
+                          "identity_attack": {
+                            "type": "number"
+                          },
+                          "insult": {
+                            "type": "number"
+                          },
+                          "threat": {
+                            "type": "number"
+                          },
+                          "sexual_explicit": {
+                            "type": "number"
+                          },
+                          "sentiment": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "toxicity",
+                          "severe_toxicity",
+                          "obscene",
+                          "identity_attack",
+                          "insult",
+                          "threat",
+                          "sexual_explicit",
+                          "sentiment"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/morality": {
+      "post": {
+        "summary": "Endpoint to calculate morality for the text",
+        "description": "<p>Here is the wiki for the <a target='_blank' href='https://github.com/medianeuroscience/emfd/blob/master/README.md'>Morality</a></p>",
+        "parameters": [
+          {
+            "name": "Auth-Key",
+            "in": "header",
+            "description": "Authorization key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body for the morality endpoint. The `data` field is an array of objects containing `url` and `text`.\n\n**Property:**\n\n- `url` (string): Input a random value.\n- `text` (string): Input the text to calculate morality.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "text": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "text"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Execution Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "morality": {
+                        "type": "object",
+                        "properties": {
+                          "Care": {
+                            "type": "number"
+                          },
+                          "Fairness": {
+                            "type": "number"
+                          },
+                          "Loyalty": {
+                            "type": "number"
+                          },
+                          "Authority": {
+                            "type": "number"
+                          },
+                          "Sanctity": {
+                            "type": "number"
+                          },
+                          "Harm": {
+                            "type": "number"
+                          },
+                          "Cheating": {
+                            "type": "number"
+                          },
+                          "Betrayal": {
+                            "type": "number"
+                          },
+                          "Subversion": {
+                            "type": "number"
+                          },
+                          "Degradation": {
+                            "type": "number"
+                          },
+                          "moral_nonmoral_ratio": {
+                            "type": "number"
+                          },
+                          "f_var": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "Care",
+                          "Fairness",
+                          "Loyalty",
+                          "Authority",
+                          "Sanctity",
+                          "Harm",
+                          "Cheating",
+                          "Betrayal",
+                          "Subversion",
+                          "Degradation",
+                          "moral_nonmoral_ratio",
+                          "f_var"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "morality"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/youtube/transcript": {
+      "post": {
+        "summary": "Endpoint to get transcript from youtube video ids",
+        "parameters": [
+          {
+            "name": "Auth-Key",
+            "in": "header",
+            "description": "Authorization key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body for the youtube transcript endpoint. The `video_id`(array) containing multiple video ids(strings). \n\n**Property:**\n\n- The `video_id`(array): Input the youtube video ids(String) for generating their transcripts.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "video_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "video_ids"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful execution of API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "video_id": {
+                        "type": "string"
+                      },
+                      "transcript": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "video_id",
+                      "transcript"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/youtube/gpt3_keywords": {
+      "post": {
+        "summary": "Endpoint to get GPT3 keywords",
+        "parameters": [
+          {
+            "name": "Auth-Key",
+            "in": "header",
+            "description": "Authorization key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body for GPT3 Keywords API. The `chunks`(array)containing multiple text(string).\n\n**Property:**\n\n- `chunk` (array): Input a body of text(string) to extract GPT Keywords.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "chunks": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "chunks"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response for GPT3 Keywords API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "keywords": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "keywords"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/youtube/gpt3_narrative": {
+      "post": {
+        "summary": "Endpoint to get GPT3 narrative",
+        "parameters": [
+          {
+            "name": "Auth-Key",
+            "in": "header",
+            "description": "Authorization key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body for GPT3 narrative API. The `chunks`(array)containing multiple text(string).\n\n**Property:**\n\n- `chunk` (array): Input a body of text(string) to extract GPT Narratives.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "chunks": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "chunks"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response for GPT3 narrative API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "narratives": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "narratives"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/youtube/chunk-transcripts": {
+      "post": {
+        "summary": "Endpoint to get chunked transcripts",
+        "parameters": [
+          {
+            "name": "Auth-Key",
+            "in": "header",
+            "description": "Authorization key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body for chunking API. The `transcripts`(array) and `chunk_word_limit` (number) are Mandatory fileds .\n\n**Property:**\n\n- `chunk_word_limit` (number): (allows from 1 to 800), Input the number to divide those many strings for the given transcripts. \n-`transcripts` (array): Input a text(string).",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "chunk_word_limit": {
+                    "type": "integer"
+                  },
+                  "transcripts": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "chunk_word_limit",
+                  "transcripts"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response for chunking API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transcript_chunk_sets": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "transcript_chunk_sets"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/youtube/tfidf-narrative": {
+      "post": {
+        "summary": "Endpoint to get tf-idf narratives",
+        "parameters": [
+          {
+            "name": "Auth-Key",
+            "in": "header",
+            "description": "Authorization key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body for tf-idf narratives API. The `raw_text`(array)containing multiple text(string).\n\n**Property:**\n\n- `raw_text` (array): Input a text(string) for getting their tf-idf narratives.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "raw_text": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "raw_text"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response for tf-idf API ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tfidf_narratives": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "entities": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "tfidf_narratives",
+                    "entities"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/emotion": {
+      "post": {
+        "summary": "Endpoint to analyze emotions in the text",
+        "description": "<p>Here is the wiki for the <a target='_blank' href='https://huggingface.co/j-hartmann/emotion-english-distilroberta-base'>Emotion Calculation</a></p>",
+        "parameters": [
+          {
+            "name": "Auth-Key",
+            "in": "header",
+            "description": "Authorization key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body for the emotion endpoint. The `data` field is an array of objects containing `id` and `text`.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "text": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "text"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Execution Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "emotions": {
+                        "type": "object",
+                        "properties": {
+                          "positive": {
+                            "type": "number"
+                          },
+                          "negative": {
+                            "type": "number"
+                          },
+                          "neutral": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "positive",
+                          "negative",
+                          "neutral"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "emotions"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
