@@ -1,0 +1,112 @@
+{
+  "toxicity": {
+    "get": {
+      "summary": "Endpoint to calculate toxicity for text",
+      "parameters": [
+        {
+          "name": "Auth-Key",
+          "in": "header",
+          "description": "Authorization key",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "sentiment",
+          "in": "query",
+          "description": "weather to process sentiment",
+          "required": true,
+          "schema": {
+            "type": "bool"
+          }
+        }
+      ],
+      "requestBody": {
+        "description": "Request body for toxicity endpoint",
+        "required": true,
+        "type": "object",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "types": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "text": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Successful execution",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "scores": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "toxicity": {
+                            "type": "number"
+                          },
+                          "severe_toxicity": {
+                            "type": "number"
+                          },
+                          "obscene": {
+                            "type": "number"
+                          },
+                          "identity_attack": {
+                            "type": "number"
+                          },
+                          "insult": {
+                            "type": "number"
+                          },
+                          "threat": {
+                            "type": "number"
+                          },
+                          "sexual_explicit": {
+                            "type": "number"
+                          },
+                          "sentiment": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "toxicity",
+                          "severe_toxicity",
+                          "obscene",
+                          "identity_attack",
+                          "insult",
+                          "threat",
+                          "sexual_explicit",
+                          "sentiment"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
